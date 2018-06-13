@@ -27,13 +27,13 @@ except IOError as e:
 
 dataset.index = dataset.index.to_datetime()
 
-# Compute the number of milliseconds covered by an instance based on the first two rows
+# Compute the number of milliseconds covered by an instance based on the first xtwo rows
 milliseconds_per_instance = (dataset.index[1] - dataset.index[0]).microseconds/1000
 
 # Step 1: Let us see whether we have some outliers we would prefer to remove.
 
 # Determine the columns we want to experiment on.
-outlier_columns = ['acc_phone_x', 'light_phone_lux']
+outlier_columns = ['acc_phone_x','gyr_phone_x','gyr_phone_x']
 
 # Create the outlier classes.
 OutlierDistr = DistributionBasedOutlierDetection()

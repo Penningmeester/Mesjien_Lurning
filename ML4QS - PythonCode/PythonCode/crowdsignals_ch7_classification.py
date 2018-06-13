@@ -22,6 +22,7 @@ import matplotlib.pyplot as plot
 import numpy as np
 from sklearn.model_selection import train_test_split
 import os
+import random
 
 
 # Of course we repeat some stuff from Chapter 3, namely to load the dataset
@@ -43,6 +44,7 @@ if not os.path.exists(export_tree_path):
     os.makedirs(export_tree_path)
 
 dataset.index = dataset.index.to_datetime()
+dataset = dataset.iloc[random.sample(list(dataset.index), len(dataset)/4)] # take first quarter of data
 
 # Let us consider our first task, namely the prediction of the label. We consider this as a non-temporal task.
 
