@@ -8,7 +8,7 @@
 ##############################################################
 
 from util.VisualizeDataset import VisualizeDataset
-from Chapter7.PrepareDatasetForLearning import PrepareDatasetForLearning
+from Chapter7.PrepareDatasetForLearning_own import PrepareDatasetForLearning
 from Chapter7.LearningAlgorithms import ClassificationAlgorithms
 from Chapter7.LearningAlgorithms import RegressionAlgorithms
 from Chapter7.Evaluation import ClassificationEvaluation
@@ -44,7 +44,9 @@ if not os.path.exists(export_tree_path):
     os.makedirs(export_tree_path)
 
 dataset.index = dataset.index.to_datetime()
-dataset = dataset.loc[random.sample(list(dataset.index), len(dataset)/4)] # take first quarter of data
+
+dataset = dataset.loc[random.sample(list(dataset.index), len(dataset)/2)] # take first quarter of data
+
 
 # Let us consider our first task, namely the prediction of the label. We consider this as a non-temporal task.
 
@@ -62,8 +64,8 @@ print 'Test set length is: ', len(test_X.index)
 
 # Select subsets of the features that we will consider:
 
-basic_features = ['acc_phone_x','acc_phone_y','acc_phone_z','acc_watch_x','acc_watch_y','acc_watch_z','gyr_phone_x','gyr_phone_y','gyr_phone_z','gyr_watch_x','gyr_watch_y','gyr_watch_z',
-                  'hr_watch_rate', 'light_phone_lux','mag_phone_x','mag_phone_y','mag_phone_z','mag_watch_x','mag_watch_y','mag_watch_z','press_phone_pressure']
+basic_features = ['acc_phone_x','acc_phone_y','acc_phone_z','gyr_phone_x','gyr_phone_y','gyr_phone_z',
+                  'mag_phone_x','mag_phone_y','mag_phone_z',]
 pca_features = ['pca_1','pca_2','pca_3','pca_4','pca_5','pca_6','pca_7']
 time_features = [name for name in dataset.columns if '_temp_' in name]
 freq_features = [name for name in dataset.columns if (('_freq' in name) or ('_pse' in name))]
@@ -93,9 +95,10 @@ plot.show()
 
 # Based on the plot we select the top 10 features.
 
-selected_features = ['acc_phone_y_freq_0.0_Hz_ws_40', 'press_phone_pressure_temp_mean_ws_120', 'gyr_phone_x_temp_std_ws_120',
-                     'mag_watch_y_pse', 'mag_phone_z_max_freq', 'gyr_watch_y_freq_weighted', 'gyr_phone_y_freq_1.0_Hz_ws_40',
-                     'acc_phone_x_freq_1.9_Hz_ws_40', 'mag_watch_z_freq_0.9_Hz_ws_40', 'acc_watch_y_freq_0.5_Hz_ws_40']
+selected_features = ['acc_phone_y_temp_mean_ws_120', 'pca_5_temp_mean_ws_120', 
+                     'acc_phone_x_freq_1.8_Hz_ws_40', 'pca_1_temp_std_ws_120', 
+                     'acc_phone_x_freq_0.6_Hz_ws_40', 'gyr_phone_x_freq_1.7_Hz_ws_40',
+                     'gyr_phone_z_freq_1.0_Hz_ws_40']
 
 # Let us first study the impact of regularization and model complexity: does regularization prevent overfitting?
 
@@ -129,7 +132,7 @@ print performance_training
 print performance_test
 plot.xlabel('regularization parameter value')
 plot.ylabel('accuracy')
-plot.ylim([0.95, 1.01])
+plot.ylim([0.85, 1.01])
 plot.legend(['training', 'test'], loc=4)
 plot.hold(False)
 
